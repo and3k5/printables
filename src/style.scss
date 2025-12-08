@@ -1,0 +1,23 @@
+html {
+    height: 100svh;
+}
+
+body {
+    height: 100svh;
+}
+
+#app {
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+@media print {
+    #vue-inspector-container {
+        display: none !important;
+    }
+    #__vue-devtools-container__ {
+        display: none !important;
+    }
+}
