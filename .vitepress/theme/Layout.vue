@@ -1,10 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useData } from "vitepress";
+import { onMounted } from "vue";
+import { ThemeConfig } from "./config-type";
+
+// https://vitepress.dev/reference/runtime-api#usedata
+const { site, frontmatter, theme } = useData<ThemeConfig>();
+
+onMounted(async () => {
+    await import("bootstrap/dist/js/bootstrap.min.js");
+});
+</script>
 
 <template>
     <header class="d-print-none">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Printables</a>
+                <a class="navbar-brand" href="#">{{ site.title }}</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -18,20 +29,15 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <RouterLink to="/calendar" custom v-slot="{ isActive, href, navigate }">
-                                <a
-                                    :class="{ 'nav-link': true, active: isActive }"
-                                    :aria-current="isActive ? 'page' : undefined"
-                                    :href="href"
-                                    >Calendar</a
-                                >
-                            </RouterLink>
+                        <li class="nav-item" v-for="link in theme.links" :key="link.href">
+                            <a :class="{ 'nav-link': true }" :href="link.href">{{ link.text }}</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <RouterView></RouterView>
+    <!-- <RouterView></RouterView> -->
+
+    <Content class="content" />
 </template>
