@@ -1,4 +1,4 @@
-import Calendar from "@/pages/calendar/calendar.vue";
+import Calendar from "@/components/calendar.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
