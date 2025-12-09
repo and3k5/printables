@@ -20,6 +20,18 @@
                 />
             </div>
         </div>
+        <div>
+            <select v-model="preferences.language" class="form-select">
+                <option
+                    v-for="lang in preferences.languages"
+                    :value="lang.code"
+                    :key="lang.code"
+                    :selected="lang.code === preferences.language"
+                >
+                    {{ lang.name }} ({{ lang.code }})
+                </option>
+            </select>
+        </div>
     </settings>
     <button type="button" class="btn btn-primary d-print-none" @click="print()">Print</button>
     <template v-for="n in monthItems" :key="n.year + '-' + n.month">
