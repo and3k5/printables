@@ -1,11 +1,11 @@
 <template>
     <settings>
         <div class="btn-group">
-            <a class="btn btn-primary" :href="linkFor(prev)">&lt;</a>
+            <a class="btn btn-primary" ref="prevLink" :href="linkFor(prev)">&lt;</a>
             <span class="btn btn-outline-primary">
                 {{ monthName(month, preferences.language) }} {{ year }}
             </span>
-            <a class="btn btn-primary" :href="linkFor(next)">&gt;</a>
+            <a class="btn btn-primary" ref="nextLink" :href="linkFor(next)">&gt;</a>
         </div>
         <div class="mx-3">
             <div class="input-group">
@@ -44,11 +44,10 @@ import CalendarItem from "./calendar-item.vue";
 import Settings from "../settings.vue";
 import { monthName } from "../../utils/locale/monthName";
 import { useRoute, useRouter } from "vitepress";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { parseNumber } from "../../utils/parse/number";
 import { usePreferences } from "../../stores/preferences";
 import { linkFor } from "./linkFor";
-import { get } from "http";
 
 const route = useRoute();
 const preferences = usePreferences();
@@ -111,12 +110,15 @@ function updateMonths(target) {
     router.go(linkFor({ year: year.value, month: month.value, months: val }));
 }
 
+const nextLink = ref<HTMLAnchorElement>();
+const prevLink = ref<HTMLAnchorElement>();
+
 onMounted(() => {
     window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowLeft") {
-            router.go(linkFor(prev.value));
+            prevLink.value?.click();
         } else if (e.key === "ArrowRight") {
-            router.go(linkFor(next.value));
+            nextLink.value?.click();
         }
     });
 });
