@@ -6,6 +6,7 @@ export default defineConfig<ThemeConfig>({
     title: "printables",
     description: "stuff to print",
     srcDir: "./src/pages",
+    base: "./",
     themeConfig: {
         links: [
             {
