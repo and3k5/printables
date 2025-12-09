@@ -1,7 +1,7 @@
 <template>
     <div class="settings-box d-print-none card">
         <div class="card-header">Settings</div>
-        <div class="card-body">
+        <div class="card-body d-flex flex-row">
             <slot></slot>
         </div>
     </div>
