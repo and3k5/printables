@@ -1,13 +1,18 @@
 <template>
-    <main class="calendar-page">
-        <h1>{{ monthName(month, preferences.language) }} {{ year }}</h1>
+    <main class="calendar-page container-fluid mb-2">
+        <div class="d-flex flex-row align-items-center">
+            <h1>{{ monthName(month, preferences.language) }} {{ year }}</h1>
+            <button type="button" class="btn btn-primary d-print-none" @click="print()">
+                Print
+            </button>
+        </div>
         <settings>
             <div class="btn-group">
-                <a class="btn btn-primary" :href="`?year=${prev.year}&month=${prev.month}`">&lt;</a>
+                <a class="btn btn-primary" :href="linkFor(prev)">&lt;</a>
                 <span class="btn btn-outline-primary">
                     {{ monthName(month, preferences.language) }}
                 </span>
-                <a class="btn btn-primary" :href="`?year=${next.year}&month=${next.month}`">&gt;</a>
+                <a class="btn btn-primary" :href="linkFor(next)">&gt;</a>
             </div>
         </settings>
         <div class="calendar">
@@ -24,15 +29,15 @@
 </template>
 
 <script setup lang="ts">
-import Settings from "../../components/settings.vue";
-import { usePreferences } from "../../stores/preferences";
-import { leadingMonthDays } from "../../utils/calculation/leadingMonthDays";
-import { monthName } from "../../utils/locale/monthName";
-import { weekDayName } from "../../utils/locale/weekDayName";
-import { computed } from "vue";
+import Settings from "./settings.vue";
+import { usePreferences } from "../stores/preferences";
+import { leadingMonthDays } from "../utils/calculation/leadingMonthDays";
+import { monthName } from "../utils/locale/monthName";
+import { weekDayName } from "../utils/locale/weekDayName";
+import { computed, onMounted } from "vue";
 
 import { useRoute, useRouter } from "vitepress";
-import { parseNumber } from "../../utils/parse/number";
+import { parseNumber } from "../utils/parse/number";
 
 const route = useRoute();
 
@@ -90,6 +95,26 @@ const next = computed(() => {
         year2 += 1;
     }
     return { year: year2, month: month2 };
+});
+
+function linkFor(prev: { year: number; month: number }) {
+    return `calendar.html?year=${prev.year}&month=${prev.month}`;
+}
+
+function print() {
+    window.print();
+}
+
+const router = useRouter();
+
+onMounted(() => {
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+            router.go(linkFor(prev.value));
+        } else if (e.key === "ArrowRight") {
+            router.go(linkFor(next.value));
+        }
+    });
 });
 </script>
 
