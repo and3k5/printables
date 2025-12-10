@@ -75,7 +75,7 @@ const prev = computed(() => {
         month2 = 12;
         year2 -= 1;
     }
-    return { year: year2, month: month2 };
+    return { year: year2, month: month2, ...(months.value !== 1 ? { months: months.value } : {}) };
 });
 
 function getNextFor(year: number, month: number, add = 1) {
@@ -85,7 +85,7 @@ function getNextFor(year: number, month: number, add = 1) {
         month2 -= 12;
         year2 += 1;
     }
-    return { year: year2, month: month2 };
+    return { year: year2, month: month2, ...(months.value !== 1 ? { months: months.value } : {}) };
 }
 
 const next = computed(() => {
@@ -103,11 +103,13 @@ const monthItems = computed(() => {
 
 const router = useRouter();
 
-function updateMonths(target) {
+function updateMonths(target: EventTarget | null) {
     if (!(target instanceof HTMLInputElement)) return;
     const val = parseNumber(target.value);
-    if (val === undefined) return;
-    router.go(linkFor({ year: year.value, month: month.value, months: val }));
+    if (val == undefined) return;
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set("months", val.toString());
+    router.go(newUrl.pathname + newUrl.search);
 }
 
 const nextLink = ref<HTMLAnchorElement>();
